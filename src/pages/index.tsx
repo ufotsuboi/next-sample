@@ -1,4 +1,6 @@
 import { env } from "@/env.mjs";
+import { trpc } from "@/utils/trpc";
+import { createCaller } from "@/utils/trpcServer";
 import { GetServerSideProps } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
@@ -6,17 +8,24 @@ import Image from "next/image";
 const inter = Inter({ subsets: ["latin"] });
 
 type Props = {
-  hoge: string;
+  nodeEnv: string;
+  server: string;
 };
 
-export default function Home({ hoge }: Props) {
+export default function Home({ nodeEnv, server }: Props) {
+  const client = trpc.hello.useQuery({ text: "client" });
+  if (!client.data) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
+          NODE_ENV = {nodeEnv}. client = {client.data.greeting}. server ={" "}
+          {server}.{" "}
           <code className="font-mono font-bold">src/pages/index.tsx</code>
         </p>
         <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white lg:static lg:size-auto lg:bg-none dark:from-black dark:via-black">
@@ -26,7 +35,7 @@ export default function Home({ hoge }: Props) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{hoge}
+            By{" "}
             <Image
               src="/vercel.svg"
               alt="Vercel Logo"
@@ -124,9 +133,12 @@ export default function Home({ hoge }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  const api = createCaller({});
+  const server = await api.hello({ text: "server" });
   return {
     props: {
-      hoge: env.NODE_ENV,
+      nodeEnv: env.NODE_ENV,
+      server: server.greeting,
     },
   };
 };
