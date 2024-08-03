@@ -1,9 +1,15 @@
+import { env } from "@/env.mjs";
+import { GetServerSideProps } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+type Props = {
+  hoge: string;
+};
+
+export default function Home({ hoge }: Props) {
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
@@ -20,7 +26,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{" "}
+            By{hoge}
             <Image
               src="/vercel.svg"
               alt="Vercel Logo"
@@ -116,3 +122,11 @@ export default function Home() {
     </main>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  return {
+    props: {
+      hoge: env.NODE_ENV,
+    },
+  };
+};
