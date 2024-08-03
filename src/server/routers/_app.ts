@@ -1,6 +1,7 @@
+import { procedure, router } from "@/server/trpc";
 import { sleep } from "@/utils/sleep";
 import { z } from "zod";
-import { procedure, router } from "../trpc";
+import { roomRouter } from "./room";
 
 export const appRouter = router({
   hello: procedure
@@ -15,6 +16,7 @@ export const appRouter = router({
         greeting: `hello ${opts.input.text}`,
       };
     }),
+  room: roomRouter,
 });
 
 export type AppRouter = typeof appRouter;
