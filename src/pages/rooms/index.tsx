@@ -1,5 +1,5 @@
+import { createCaller } from "@/lib/trpc/server";
 import type { Room } from "@/models";
-import { createCaller } from "@/utils/trpcServer";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 

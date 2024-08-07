@@ -1,6 +1,6 @@
 import { env } from "@/env.mjs";
-import { trpc } from "@/utils/trpc";
-import { createCaller } from "@/utils/trpcServer";
+import { trpc } from "@/lib/trpc/client";
+import { createCaller } from "@/lib/trpc/server";
 import { GetServerSideProps } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";

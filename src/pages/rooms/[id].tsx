@@ -1,5 +1,5 @@
+import { createCaller } from "@/lib/trpc/server";
 import { Room } from "@/models";
-import { createCaller } from "@/utils/trpcServer";
 import { GetServerSideProps } from "next";
 import * as z from "zod";
 
