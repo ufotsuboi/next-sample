@@ -1,10 +1,10 @@
 import { prisma } from "@/server/prisma";
 import { roomSchema } from "@/server/schema";
-import { procedure, router } from "@/server/trpc";
+import { protectedProcedure, publicProcedure, router } from "@/server/trpc";
 import { z } from "zod";
 
 export const roomRouter = router({
-  createRoom: procedure
+  createRoom: protectedProcedure
     .input(
       z.object({
         name: z.string(),
@@ -19,7 +19,7 @@ export const roomRouter = router({
       });
       return room;
     }),
-  getRoom: procedure
+  getRoom: protectedProcedure
     .input(
       z.object({
         id: z.number(),
@@ -34,8 +34,12 @@ export const roomRouter = router({
       });
       return room;
     }),
-  getRooms: procedure.output(z.array(roomSchema)).query(async () => {
-    const rooms = await prisma.room.findMany();
-    return rooms;
-  }),
+  getRooms: publicProcedure
+    .output(z.array(roomSchema))
+    .query(async ({ ctx }) => {
+      console.error("ctx", ctx.session);
+      ctx.res.setHeader("Set-Cookie", "hoge=fuga");
+      const rooms = await prisma.room.findMany();
+      return rooms;
+    }),
 });

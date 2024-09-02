@@ -40,6 +40,10 @@ export const { auth, handlers } = NextAuth({
         ...token,
       };
     },
+    async authorized({ auth }) {
+      console.log("auth", auth);
+      return !!auth;
+    },
     // sessionにJWTトークンからのユーザ情報を格納
     async session({ session, token }) {
       session.user.uid = token.uid;

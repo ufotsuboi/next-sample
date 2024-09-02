@@ -1,10 +1,10 @@
 import { sleep } from "@/lib/sleep";
-import { procedure, router } from "@/server/trpc";
+import { publicProcedure, router } from "@/server/trpc";
 import { z } from "zod";
 import { roomRouter } from "./room";
 
 export const appRouter = router({
-  hello: procedure
+  hello: publicProcedure
     .input(
       z.object({
         text: z.string(),

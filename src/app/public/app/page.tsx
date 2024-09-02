@@ -1,14 +1,17 @@
 import { createCaller } from "@/lib/trpc/server";
-import type { Room } from "@/models";
 import { createContextGetServerSideProps } from "@/server/context";
 import { GetServerSideProps } from "next";
+import { cookies, headers } from "next/headers";
 import Link from "next/link";
 
-type Props = {
-  rooms: Room[];
-};
+export default async function Page() {
+  const h = headers();
+  h.set("x-foo", "bar");
+  const c = cookies();
+  const context = await createContextGetServerSideProps(ctx);
+  const api = createCaller(context);
+  const rooms = await api.room.getRooms();
 
-export default function Page({ rooms }: Props) {
   return (
     <div>
       <h1>Rooms</h1>
