@@ -1,6 +1,7 @@
-import { env } from "@/env.mjs";
+import { env } from "@/env";
 import { trpc } from "@/lib/trpc/client";
 import { createCaller } from "@/lib/trpc/server";
+import { createContextGetServerSideProps } from "@/server/context";
 import { GetServerSideProps } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
@@ -132,8 +133,9 @@ export default function Home({ nodeEnv, server }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const api = createCaller({});
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+  const context = await createContextGetServerSideProps(ctx);
+  const api = createCaller(context);
   const server = await api.hello({ text: "server" });
   return {
     props: {

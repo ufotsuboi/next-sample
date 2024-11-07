@@ -4,7 +4,7 @@ import { GetServerSidePropsContext } from "next";
 import { Session } from "next-auth";
 
 export type Context = {
-  session: Session | null;
+  session: Session | null | undefined;
   res: GetServerSidePropsContext["res"];
   req: GetServerSidePropsContext["req"];
 };

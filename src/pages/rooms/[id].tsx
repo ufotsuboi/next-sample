@@ -1,5 +1,6 @@
 import { createCaller } from "@/lib/trpc/server";
 import { Room } from "@/models";
+import { createContextGetServerSideProps } from "@/server/context";
 import { GetServerSideProps } from "next";
 import * as z from "zod";
 
@@ -26,7 +27,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
       notFound: true,
     };
   }
-  const api = createCaller({});
+  const context = await createContextGetServerSideProps(ctx);
+  const api = createCaller(context);
   const room = await api.room.getRoom({ id: r.data.id });
   if (!room) {
     return {

@@ -1,4 +1,4 @@
-import { env } from "@/env.mjs";
+import { env } from "@/env";
 import type { DecodedIdToken } from "firebase-admin/auth";
 import { getApps, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
