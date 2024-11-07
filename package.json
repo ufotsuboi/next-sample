@@ -13,7 +13,7 @@
     "format": "npm-run-all format:*",
     "typecheck": "tsc --noEmit",
     "migrate": "prisma migrate dev",
-    "test": "vitest"
+    "test": "vitest run"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
