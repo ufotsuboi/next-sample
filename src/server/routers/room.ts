@@ -37,7 +37,6 @@ export const roomRouter = router({
   getRooms: publicProcedure
     .output(z.array(roomSchema))
     .query(async ({ ctx }) => {
-      console.error("ctx", ctx.session);
       ctx.res.setHeader("Set-Cookie", "hoge=fuga");
       const rooms = await prisma.room.findMany();
       return rooms;

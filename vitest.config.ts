@@ -10,7 +10,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
     environment: "vprisma",
-    setupFiles: ["vitest-environment-vprisma/setup", "./vitest.setup.ts"],
+    setupFiles: ["vitest-environment-vprisma/setup", "./tests/setup.ts"],
     environmentOptions: {
       vprisma: {
         baseEnv: "node",
