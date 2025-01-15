@@ -11,6 +11,17 @@ const pathMatch = (path: string, patterns: (string | RegExp)[]) =>
   );
 
 export const middleware: NextMiddleware = async (req) => {
+  const forwardedHost = req.headers.get("x-forwarded-host");
+  if (forwardedHost) {
+    req.nextUrl.hostname = forwardedHost;
+  }
+
+  const forwardedProto = req.headers.get("x-forwarded-proto");
+  if (forwardedProto === "https") {
+    req.nextUrl.protocol = "https";
+    req.nextUrl.port = "443";
+  }
+
   console.log("middleware: nextUrl.href", req.nextUrl.href);
   console.log(
     "middleware: x-forwarded-host",
