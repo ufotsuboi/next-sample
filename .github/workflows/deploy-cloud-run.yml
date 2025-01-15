@@ -17,6 +17,7 @@ jobs:
 
       - name: Authenticate using service account key
         use: google-github-actions/auth@v2
+        with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       # 2. Google Cloud SDKをセットアップ
