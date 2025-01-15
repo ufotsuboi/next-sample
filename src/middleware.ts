@@ -41,6 +41,7 @@ export const middleware: NextMiddleware = async (req) => {
   const token = await getToken({
     req,
     secret: process.env.AUTH_SECRET,
+    secureCookie: process.env.NODE_ENV === "production",
   });
   const isAuthenticated = !!token;
 
