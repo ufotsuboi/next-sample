@@ -2,6 +2,20 @@ import { auth, PUBLIC_PATH, UNAUTHORIZED_ONLY_PATH } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 export const middleware = auth(async (req) => {
+  console.log("middleware: nextUrl.href", req.nextUrl.href);
+  console.log(
+    "middleware: x-forwarded-host",
+    req.headers.get("x-forwarded-host"),
+  );
+  console.log(
+    "middleware: x-forwarded-proto",
+    req.headers.get("x-forwarded-proto"),
+  );
+  console.log(
+    "middleware: x-forwarded-port",
+    req.headers.get("x-forwarded-port"),
+  );
+
   const { pathname, searchParams } = req.nextUrl;
   const isAuthenticated = !!req.auth;
 
