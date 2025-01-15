@@ -21,7 +21,6 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
 
       # 3. Artifact Registryへのアクセス設定
       - name: Configure Docker for Artifact Registry
