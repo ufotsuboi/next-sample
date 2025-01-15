@@ -1,0 +1,50 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main # mainブランチにプッシュされた場合に実行
+
+jobs:
+  deploy:
+    name: Build and Deploy to Cloud Run
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. リポジトリをチェックアウト
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Google Cloud SDKをセットアップ
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      # 3. Artifact Registryへのアクセス設定
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker ${REGION}-docker.pkg.dev --quiet
+
+      # 3. Docker Buildxをセットアップ
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # 4. Dockerイメージをビルド
+      - name: Build Docker Image
+        run: |
+          docker buildx build \
+            --platform linux/amd64 \
+            --tag asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/sample/${{ secrets.CLOUD_RUN_SERVICE_NAME }}:${{ github.sha }} \
+            --push .
+
+      # 5. Cloud Runにデプロイ
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ secrets.CLOUD_RUN_SERVICE_NAME }} \
+            --image asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/sample/${{ secrets.CLOUD_RUN_SERVICE_NAME }}:${{ github.sha }} \
+            --region ${{ secrets.GCP_REGION }} \
+            --platform managed \
+            --allow-unauthenticated
