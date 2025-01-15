@@ -11,6 +11,8 @@ RUN npm ci
 # Copy application code
 COPY . .
 
+RUN npx prisma generate
+
 # Build the Next.js application in standalone mode
 RUN npm run build
 

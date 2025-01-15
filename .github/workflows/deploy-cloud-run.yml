@@ -32,10 +32,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: prisma codegen
-        run: |
-          npx prisma generate
-
       # 4. Dockerイメージをビルド
       - name: Build Docker Image
         run: |
